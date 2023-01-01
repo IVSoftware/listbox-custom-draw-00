@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,56 +23,114 @@ namespace listbox_custom_draw_00
             listBox1.DrawItem += onDrawItem;
             listBox1.DrawMode = DrawMode.OwnerDrawFixed;
             listBox1.SelectedIndexChanged += (sender, e) => listBox1.Refresh();
+
+            // Tests
+            buttonTest.Click += onButtonTest;
+            buttonReadJson.Click += onButtonReadJson;
+        }
+
+        private void onButtonTest(object sender, EventArgs e)
+        {
+            MyItems.Clear();
+            MyItems.Add(new MyListBoxItem
+            {
+                Message = "Validated data successfully",
+                ItemColor = Color.Green,
+            });
+            MyItems.Add(new MyListBoxItem
+            {
+                Message = "Failed to validate data",
+                ItemColor = Color.Red,
+            });
+        }
+
+        private void onButtonReadJson(object sender, EventArgs e)
+        {
+            MyItems.Clear();
+            foreach (
+                var myItem 
+                in JsonConvert.DeserializeObject<List<MyListBoxItem>>(mockFileContents))
+            {
+                MyItems.Add(myItem);
+            }
         }
 
         private void onDrawItem(object sender, DrawItemEventArgs e)
         {
-            var myItem = MyItems[e.Index];
-
-            if(listBox1.SelectedItems.Contains(myItem))
-            {
-                using (var backgroundBrush = new SolidBrush(myItem.ItemColor))
-                {
-                    e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
-                }
-
-                using (var textBrush = new SolidBrush(Color.White))
-                {
-                    e.Graphics.DrawString(myItem.Message, listBox1.Font, textBrush, e.Bounds);
-                }
+            if(e.Index == -1)
+            {                
+                e.DrawBackground();
             }
             else
             {
-                using (var backgroundBrush = new SolidBrush(SystemColors.Window))
+                var myItem = MyItems[e.Index];
+
+                if (listBox1.SelectedItems.Contains(myItem))
                 {
-                    e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+                    using (var backgroundBrush = new SolidBrush(myItem.ItemColor))
+                    {
+                        e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+                    }
+
+                    using (var textBrush = new SolidBrush(Color.White))
+                    {
+                        e.Graphics.DrawString(myItem.Message, listBox1.Font, textBrush, e.Bounds);
+                    }
                 }
-                using (var textBrush = new SolidBrush(myItem.ItemColor))
+                else
                 {
-                    e.Graphics.DrawString(myItem.Message, listBox1.Font, textBrush, e.Bounds);
+                    using (var backgroundBrush = new SolidBrush(SystemColors.Window))
+                    {
+                        e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+                    }
+                    using (var textBrush = new SolidBrush(myItem.ItemColor))
+                    {
+                        e.Graphics.DrawString(myItem.Message, listBox1.Font, textBrush, e.Bounds);
+                    }
                 }
             }
         }
 
-        BindingList<MyListBoxItem> MyItems { get; } = new BindingList<MyListBoxItem>
+        BindingList<MyListBoxItem> MyItems { get; } = new BindingList<MyListBoxItem>();
+        BindingList<MyListBoxItem> JsonItems { get; } = new BindingList<MyListBoxItem>
         {
             new MyListBoxItem
             {
-                Message = "Validated data successfully",
+                Message = "Blue Item",
+                ItemColor= Color.Red,
+            },
+            new MyListBoxItem
+            {
+                Message = "Green Item",
                 ItemColor= Color.Green,
             },
             new MyListBoxItem
             {
-                Message = "Failed to validate data",
+                Message = "Red Item",
                 ItemColor= Color.Red,
             },
         };
+
+        const string mockFileContents = 
+@"[
+  {
+    ""ItemColor"": ""Blue"",
+    ""Message"": ""Blue Item""
+  },
+  {
+    ""ItemColor"": ""Green"",
+    ""Message"": ""Green Item""
+  },
+  {
+    ""ItemColor"": ""Red"",
+    ""Message"": ""Red Item""
+  }
+]";
+
     }
     public class MyListBoxItem
     { 
         public Color ItemColor { get; set; }
         public string Message { get; set; }
-        public override string ToString() => Message;
     }
-    //const string mockFileContents = @"";
 }
