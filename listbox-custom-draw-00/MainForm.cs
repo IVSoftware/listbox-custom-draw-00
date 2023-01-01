@@ -57,7 +57,7 @@ namespace listbox_custom_draw_00
 
         private void onDrawItem(object sender, DrawItemEventArgs e)
         {
-            if(e.Index == -1)
+            if((e.Index == -1) || (e.Index >= MyItems.Count))
             {                
                 e.DrawBackground();
             }

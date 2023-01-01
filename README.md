@@ -47,7 +47,7 @@ Your question is **How to color items in listBox in different colors?** and the 
         }
         private void onDrawItem(object sender, DrawItemEventArgs e)
         {
-            if(e.Index == -1)
+            if((e.Index == -1) || (e.Index >= MyItems.Count))
             {                
                 e.DrawBackground();
             }
