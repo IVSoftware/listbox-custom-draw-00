@@ -92,24 +92,6 @@ namespace listbox_custom_draw_00
         }
 
         BindingList<MyListBoxItem> MyItems { get; } = new BindingList<MyListBoxItem>();
-        BindingList<MyListBoxItem> JsonItems { get; } = new BindingList<MyListBoxItem>
-        {
-            new MyListBoxItem
-            {
-                Message = "Blue Item",
-                ItemColor= Color.Red,
-            },
-            new MyListBoxItem
-            {
-                Message = "Green Item",
-                ItemColor= Color.Green,
-            },
-            new MyListBoxItem
-            {
-                Message = "Red Item",
-                ItemColor= Color.Red,
-            },
-        };
 
         const string mockFileContents = 
 @"[
