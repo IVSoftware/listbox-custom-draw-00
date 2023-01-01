@@ -1,7 +1,8 @@
-Your question is **How to color items in listBox in different colors?** and the "Y" of what might be considered an [X-Y Problem](https://meta.stackexchange.com/a/66378) is that you get an exception when you try to Add an item inline. After carefully reading your code, something that would make a big difference would be using the `MyListBoxItem` type consistently in both in your `DataSource` and your Json serialization and deserialization.
+Your question is **How to color items in listBox in different colors?** and the "Y" of what might be considered an [X-Y Problem](https://meta.stackexchange.com/a/66378) is that you get an exception when you try to Add an item inline. After carefully reading your code, something that would make a big difference would be using the `MyListBoxItem` type consistently in both in your `DataSource` and your Json serialization and deserialization, and then appending the data source when you wish to Add an item inline.
 
-[![add inline][1]][1]
+[![add-inline][1]][1]
 
+***
 **Datasource**
 
     BindingList<MyListBoxItem> MyItems { get; } = new BindingList<MyListBoxItem>();
@@ -135,5 +136,5 @@ Your question is **How to color items in listBox in different colors?** and the 
     ]";
 
 
-  [1]: https://i.stack.imgur.com/qYhyB.png
+  [1]: https://i.stack.imgur.com/ZptG8.png
   [2]: https://i.stack.imgur.com/4H187.png
